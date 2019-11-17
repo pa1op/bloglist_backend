@@ -12,6 +12,11 @@ describe('api tests', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.body.length).toBe(2);
   });
+
+  test('blog has id field', async () => {
+    const response = await api.get('/api/blogs');
+    expect(response.body[0].id).toBeDefined();
+  });
 });
 
 afterAll(() => {
