@@ -25,7 +25,24 @@ const mostBlogs = (blogs) => {
   };
 };
 
+const mostLikes = (blogs) => {
+  const authors = _.uniq(blogs.map((blog) => blog.author));
+  const answer = {
+    author: '',
+    likes: 0,
+  };
+  authors.forEach((author) => {
+    const blogsByAuthor = blogs.filter((blog) => blog.author === author);
+    const authorLikes = _.sumBy(blogsByAuthor, (blog) => blog.likes);
+    if (authorLikes > answer.likes) {
+      answer.author = author;
+      answer.likes = authorLikes;
+    }
+  });
+  return answer;
+};
+
 
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs,
+  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes,
 };

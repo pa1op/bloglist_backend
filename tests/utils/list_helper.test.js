@@ -50,6 +50,15 @@ describe('total likes', () => {
     },
   ];
 
+  test('find author with most likes', () => {
+    const rightAnswer = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    };
+    const result = listHelper.mostLikes(blogList);
+    expect(result).toEqual(rightAnswer);
+  });
+
   test('find author with most blogs', () => {
     const rightAnswer = {
       author: 'Robert C. Martin',
