@@ -32,21 +32,24 @@ const initialBlogs = [
   },
 ];
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
-  initialBlogs.forEach(async (blog) => {
-    const blogObject = new Blog(blog);
-    await blogObject.save();
-  });
-});
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('api tests', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    initialBlogs.forEach(async (blog) => {
+      const blogObject = new Blog(blog);
+      await blogObject.save();
+    });
+  });
+
   test('blogs are returned as json', async () => {
+    await sleep(1000);
     const response = await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/);
-    expect(response.body.length).toBe(2);
+    expect(response.body.length).toBe(initialBlogs.length);
   });
 
   test('blog has id field', async () => {
@@ -72,11 +75,29 @@ describe('api tests', () => {
     expect(postResponse.body.likes).toEqual(newBlog.likes);
     const getResponse = await api
       .get('/api/blogs');
-    console.log(getResponse.body);
     expect(getResponse.body.length).toBe(initialBlogs.length + 1);
   });
-});
 
-afterAll(() => {
-  mongoose.connection.close();
+  test('blog has 0 likes by default', async () => {
+    const newBlog = {
+      title: 'Type wars',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    };
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+    const blogs = await api.get('/api/blogs');
+    blogs.body.forEach((blog) => {
+      if (blog.title === newBlog.title) {
+        expect(blog.likes).toBe(0);
+      }
+    });
+  });
+
+  afterAll(() => {
+    mongoose.connection.close();
+  });
 });
