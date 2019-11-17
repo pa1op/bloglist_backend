@@ -50,6 +50,15 @@ describe('total likes', () => {
     },
   ];
 
+  test('find author with most blogs', () => {
+    const rightAnswer = {
+      author: 'Robert C. Martin',
+      blogs: 3,
+    };
+    const result = listHelper.mostBlogs(blogList);
+    expect(result).toEqual(rightAnswer);
+  });
+
   test('find favorite blog', () => {
     const rightAnswer = {
       _id: '5a422b3a1b54a676234d17f9',
@@ -60,7 +69,6 @@ describe('total likes', () => {
       __v: 0,
     };
     const result = listHelper.favoriteBlog(blogList);
-    console.log(result);
     expect(result).toEqual(rightAnswer);
   });
 
