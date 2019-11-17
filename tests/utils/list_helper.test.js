@@ -43,18 +43,29 @@ describe('total likes', () => {
       __v: 0,
     },
     {
-      _id: '5a422bc61b54a676234d17fc',
       title: 'Type wars',
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
       likes: 2,
-      __v: 0,
     },
   ];
 
+  test('find favorite blog', () => {
+    const rightAnswer = {
+      _id: '5a422b3a1b54a676234d17f9',
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 12,
+      __v: 0,
+    };
+    const result = listHelper.favoriteBlog(blogList);
+    console.log(result);
+    expect(result).toEqual(rightAnswer);
+  });
+
   test('when list has only one blog equals the likes of that', () => {
     const result = listHelper.totalLikes(blogList);
-    console.log(result);
     expect(result).toBe(36);
   });
 
