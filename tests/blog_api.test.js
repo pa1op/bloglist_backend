@@ -92,6 +92,25 @@ describe('api tests', () => {
     });
   });
 
+  test('verify blog with missing fields is not created', async () => {
+    const missingTitleBlog = {
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    };
+    const missingUrlBlog = {
+      title: 'Type wars',
+      author: 'Robert C. Martin',
+    };
+    await api
+      .post('/api/blogs')
+      .send(missingTitleBlog)
+      .expect(400);
+    await api
+      .post('/api/blogs')
+      .send(missingUrlBlog)
+      .expect(400);
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });
