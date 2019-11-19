@@ -111,6 +111,15 @@ describe('api tests', () => {
       .expect(400);
   });
 
+  test('delete blog works', async () => {
+    const oldBlogs = await api.get('/api/blogs');
+    await api
+      .delete(`/api/blogs/${oldBlogs.body[0].id}`)
+      .expect(204);
+    const newBlogs = await api.get('/api/blogs');
+    expect(oldBlogs.body.length - 1).toBe(newBlogs.body.length);
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });
