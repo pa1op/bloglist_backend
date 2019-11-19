@@ -120,6 +120,22 @@ describe('api tests', () => {
     expect(oldBlogs.body.length - 1).toBe(newBlogs.body.length);
   });
 
+  test('update blog works', async () => {
+    const replacement = {
+      title: 'Fullstack Mooc',
+      author: 'palop',
+      url: 'www.example.com',
+    };
+    const getResult = await api.get('/api/blogs');
+    const putResult = await api
+      .put(`/api/blogs/${getResult.body[0].id}`)
+      .send(replacement)
+      .expect(200);
+    expect(putResult.body.title).toBe(replacement.title);
+    expect(putResult.body.author).toBe(replacement.author);
+    expect(putResult.body.url).toBe(replacement.url);
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });
