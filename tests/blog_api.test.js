@@ -32,19 +32,14 @@ const initialBlogs = [
   },
 ];
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 describe('api tests', () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
-    initialBlogs.forEach(async (blog) => {
-      const blogObject = new Blog(blog);
-      await blogObject.save();
-    });
+    const blogObjects = initialBlogs.map((blog) => new Blog(blog));
+    await Promise.all(blogObjects.map((blogObject) => blogObject.save()));
   });
 
   test('blogs are returned as json', async () => {
-    await sleep(1000);
     const response = await api
       .get('/api/blogs')
       .expect(200)
