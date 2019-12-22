@@ -34,6 +34,29 @@ describe('when there is initially one user at db', () => {
     const usernames = usersAtEnd.map((u) => u.username);
     expect(usernames).toContain(newUser.username);
   });
+
+  test('username and password must be > 3 characters', async () => {
+    const testUser1 = {
+      username: 'n',
+      name: 'NN',
+      password: 'kala',
+    };
+    await api
+      .post('/api/users')
+      .send(testUser1)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+    const testUser2 = {
+      username: 'Esko',
+      name: 'NN',
+      password: 'k',
+    };
+    await api
+      .post('/api/users')
+      .send(testUser2)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+  });
 });
 
 afterAll(() => {
